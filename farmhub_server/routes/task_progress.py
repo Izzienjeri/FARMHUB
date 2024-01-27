@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Api, Resource, reqparse
-from app.models import User, Task, db, Farm
+from farmhub_server.models import User, Task, db, Farm
 
 task_progress_bp = Blueprint('task_progress', __name__)
 api = Api(task_progress_bp)

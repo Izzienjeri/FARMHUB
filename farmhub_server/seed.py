@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import User, Farm, Worker, Task
+from farmhub_server.models import User, Farm, Worker, Task
 
 
 

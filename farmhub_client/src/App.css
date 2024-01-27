@@ -1,0 +1,14 @@
+#root {
+  border: 2px solid white;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+#reg {
+  border: 2px solid white;
+  color: black;
+  align-items: center;
+}

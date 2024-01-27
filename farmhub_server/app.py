@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
-from app.routes.auth import auth_bp
-from app.routes.profile import profile_bp
-from app.routes.farm_management import farm_management_bp
-from app.routes.task_assignment import task_assignment_bp
-from app.routes.task_progress import task_progress_bp
+from farmhub_server.routes.auth import auth_bp
+from farmhub_server.routes.profile import profile_bp
+from farmhub_server.routes.farm_management import farm_management_bp
+from farmhub_server.routes.task_assignment import task_assignment_bp
+from farmhub_server.routes.task_progress import task_progress_bp
 from flask_migrate import Migrate
-from app.models import db
+from farmhub_server.models import db
 import secrets
 import os
 from flask_cors import CORS

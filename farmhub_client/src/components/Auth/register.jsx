@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import "../../App.css";
 
 const Register = () => {
   const history = useHistory();
@@ -43,7 +44,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div id="reg">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <label>

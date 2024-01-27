@@ -1,4 +1,4 @@
-from flask import Blueprint,request,make_response
+from flask import Blueprint,request,make_response, jsonify
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import current_user
 from flask_jwt_extended import create_access_token
@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity,get_jwt
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_restful import Api, Resource, reqparse, abort
-from app.models import User, db, TokenBlocklist
+from farmhub_server.models import User, db, TokenBlocklist
 import datetime
 
 auth_bp = Blueprint('auth', __name__)
@@ -64,6 +64,10 @@ class UserLogin(Resource):
         return {"access_token": token, "username": user.username, "user_id":user.id,"firstname":user.firstname,"lastname":user.lastname,"email":user.email}
 
 class UserRegister(Resource):
+    def get(self):
+        users = User.query.all()
+        return make_response(jsonify([user.to_dict() for user in users]))
+
     def post(self):
         data = register_args.parse_args()
         if data["password"] != data["confirmPassword"]:

@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_restful import Api, Resource
-from app.models import User
+from farmhub_server.models import User
 
 profile_bp = Blueprint('profile', __name__)
 api = Api(profile_bp)

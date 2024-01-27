@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask_restful import Api
 from flask_marshmallow import Marshmallow
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from app.models import User, Farm, Task, WorkerTask  # Corrected imports
+from farmhub_server.models import User, Farm, Task, WorkerTask  # Corrected imports
 
 serializer_bp = Blueprint('serializer_blueprint', __name__)
 ma = Marshmallow(serializer_bp)

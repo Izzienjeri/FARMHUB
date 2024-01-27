@@ -1,8 +1,8 @@
 import { jsxDEV } from "react/jsx-dev-runtime";
 import React from "react";
-import ReactDOM from "react-dom"; // Corrected import
+import ReactDOM from "react-dom";
 import App from "./App.jsx";
-import "./index.css";
+import "./App.css";
 
 ReactDOM.render(
   <React.StrictMode>
