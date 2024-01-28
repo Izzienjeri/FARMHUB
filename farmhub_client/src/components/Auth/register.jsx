@@ -50,6 +50,7 @@ const Register = ({ setShowLogin }) => {
               headers: {
                 "Content-Type": "application/json",
               },
+              credentials: "include",
               body: JSON.stringify(values, null, 2),
             })
               .then((res) => {
@@ -79,7 +80,7 @@ const Register = ({ setShowLogin }) => {
   });
   return (
     <div className="ui centered card">
-      <h1>User Sign Up Form</h1>
+      <h1>Sign Up Form</h1>
       <form onSubmit={formik.handleSubmit}>
         <label htmlFor="username">Username</label>
         <br />

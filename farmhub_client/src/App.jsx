@@ -13,27 +13,21 @@ function App() {
     <Router>
       <div>
         <h1>FARMHUB</h1>
-        <Link to="/auth/register">Register </Link>
-        <Link to="/auth/login">Login </Link>
-        <Link to="/auth/logout">Logout </Link>
+        <Link to="/register">Register </Link>
+        <Link to="/login">Login </Link>
+        <Link to="/logout">Logout </Link>
       </div>
       <div></div>
       <div>
         <Routes>
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/logout" element={<Logout />} />
-          <Route path="/auth/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/register" element={<Register />} />
 
-          <Route path="/Dashboard/dashboard" element={<Dashboard />} />
-          <Route
-            path="/Dashboard/farmmanagement"
-            element={<FarmManagement />}
-          />
-          <Route
-            path="/Dashboard/taskassignment"
-            element={<TaskAssignment />}
-          />
-          <Route path="/Dashboard/taskprogress" element={<TaskProgress />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/farmmanagement" element={<FarmManagement />} />
+          <Route path="/taskassignment" element={<TaskAssignment />} />
+          <Route path="/taskprogress" element={<TaskProgress />} />
         </Routes>
       </div>
     </Router>

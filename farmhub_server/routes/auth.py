@@ -98,29 +98,29 @@ class UserLogout(Resource):
 
  
 
-# class CheckEmail(Resource):
-#     def options(self):
-#         response_headers = {
-#             "Access-Control-Allow-Origin": "http://localhost:5173",
-#             "Access-Control-Allow-Methods": "POST",
-#             "Access-Control-Allow-Headers": "Content-Type, Authorization",
-#             "Access-Control-Allow-Credentials": "true",
-#         }
-#         return make_response("", 200, response_headers)
+class CheckEmail(Resource):
+    def options(self):
+        response_headers = {
+            "Access-Control-Allow-Origin": "http://localhost:5173",
+            "Access-Control-Allow-Methods": "POST",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Allow-Credentials": "true",
+        }
+        return make_response("", 200, response_headers)
 
-#     def post(self):
-#         print("Received request to check email")
-#         data = request.get_json()
-#         email = data.get('email')
-#         print("Email:", email)
-#         user = User.query.filter(User.email == email).first()
-#         response_body = {"exists": user is not None}
-#         return make_response(jsonify(response_body), 200)
-
-
+    def post(self):
+        print("Received request to check email")
+        data = request.get_json()
+        email = data.get('email')
+        print("Email:", email)
+        user = User.query.filter(User.email == email).first()
+        response_body = {"exists": user is not None}
+        return make_response(jsonify(response_body), 200)
 
 
-api.add_resource(UserLogin, "/login")
-api.add_resource(UserRegister, "/register")
-api.add_resource(UserLogout, "/logout")
-# api.add_resource(CheckEmail, '/check-email')
+
+
+api.add_resource(UserLogin, "/auth/login", endpoint='login')
+api.add_resource(UserRegister, "/auth/register", endpoint='register')
+api.add_resource(UserLogout, "/auth/logout", endpoint='logout')
+api.add_resource(CheckEmail, '/auth/check-email', endpoint='check_email')
