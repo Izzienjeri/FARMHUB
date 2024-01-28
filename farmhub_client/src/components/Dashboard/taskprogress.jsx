@@ -4,7 +4,7 @@ const TaskProgress = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    fetch("/task_progress/tasks", {
+    fetch("http://localhost:5555/task_progress/tasks", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

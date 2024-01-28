@@ -4,7 +4,7 @@ const UserProfile = () => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    fetch("/profile", {
+    fetch("http://localhost:5555/profile", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

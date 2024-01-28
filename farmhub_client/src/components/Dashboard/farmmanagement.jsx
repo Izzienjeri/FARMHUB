@@ -4,7 +4,7 @@ const FarmManagement = () => {
   const [farms, setFarms] = useState([]);
 
   useEffect(() => {
-    fetch("/farm_management/farms", {
+    fetch("http://localhost:5555/farm_management/farms", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

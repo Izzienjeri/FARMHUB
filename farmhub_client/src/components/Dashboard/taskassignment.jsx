@@ -13,7 +13,7 @@ const TaskAssignment = () => {
   };
 
   const handleAssignTask = () => {
-    fetch("/task_assignment/assign_task", {
+    fetch("http://localhost:5555/task_assignment/assign_task", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

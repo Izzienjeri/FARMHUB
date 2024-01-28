@@ -17,7 +17,7 @@ const AddFarmForm = ({ onAddFarm }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("/farm_management/add_farm", {
+    fetch("http://localhost:5555/farm_management/add_farm", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

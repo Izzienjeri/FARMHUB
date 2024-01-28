@@ -1,120 +1,163 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import "../../App.css";
+import React from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
-  const history = useHistory();
-  const [formData, setFormData] = useState({
-    username: "",
-    firstname: "",
-    lastname: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+const Register = ({ setShowLogin }) => {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const formSchema = yup.object().shape({
+    username: yup.string().required("Must Enter a username"),
+    email: yup.string().email("invalid email"),
+    password: yup.string().required("Must Enter a Password").min(8),
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      email: "",
+      password: "",
+      firstname: "",
+      lastname: "",
+      confirmPassword: "",
+    },
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    validationSchema: formSchema,
+    onSubmit: (values, { resetForm }) => {
+      setLoading(true);
+      setError(null);
 
-    fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.error) {
-          console.error("Registration Error:", data.error);
-        } else {
-          history.push("/login");
-        }
+      fetch("http://localhost:5555/auth/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: formik.values.email }),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
+        .then((resp) => resp.json())
+        .then((data) => {
+          if (data.exists) {
+            setLoading(false);
+            setError(
+              "Email address already exists. Please choose a different one."
+            );
+          } else {
+            fetch("http://localhost:5555/auth/register", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(values, null, 2),
+            })
+              .then((res) => {
+                setLoading(false);
+                if (res.status === 200) {
+                  setShowLogin(true);
 
+                  navigate("http://localhost:5555/auth/login");
+                } else {
+                  resetForm();
+                  setError("Error creating user. Please try again.");
+                }
+              })
+              .catch((error) => {
+                setLoading(false);
+                setError("Error creating user. Please try again.");
+                console.error("Error while signing up:", error);
+              });
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          setError("Error checking email. Please try again.");
+          console.error("Error checking email:", error);
+        });
+    },
+  });
   return (
-    <div id="reg">
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </label>
+    <div className="ui centered card">
+      <h1>User Sign Up Form</h1>
+      <form onSubmit={formik.handleSubmit}>
+        <label htmlFor="username">Username</label>
         <br />
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <input
+          id="username"
+          name="username"
+          onChange={formik.handleChange}
+          value={formik.values.username}
+        />
+        <p style={{ color: "red" }}>{formik.errors.username}</p>
+
+        <label htmlFor="firstname">First Name</label>
         <br />
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <input
+          id="firstname"
+          name="firstname"
+          onChange={formik.handleChange}
+          value={formik.values.firstname}
+        />
+        <p style={{ color: "red" }}>{formik.errors.firstname}</p>
+
+        <label htmlFor="lastname">Last Name</label>
         <br />
-        <label>
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <input
+          id="lastname"
+          name="lastname"
+          onChange={formik.handleChange}
+          value={formik.values.lastname}
+        />
+        <p style={{ color: "red" }}>{formik.errors.lastname}</p>
+
+        <label htmlFor="email">Email</label>
         <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <input
+          id="email"
+          name="email"
+          onChange={formik.handleChange}
+          value={formik.values.email}
+        />
+        <p style={{ color: "red" }}>{formik.errors.email}</p>
+
+        <label htmlFor="password">Password</label>
         <br />
-        <label>
-          Confirm Password:
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          onChange={formik.handleChange}
+          value={formik.values.password}
+        />
+        <p style={{ color: "red" }}>{formik.errors.password}</p>
+
+        <label htmlFor="confirmPassword">Confirm Password</label>
         <br />
-        <button type="submit">Register</button>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          onChange={formik.handleChange}
+          value={formik.values.confirmPassword}
+        />
+        <p style={{ color: "red" }}>{formik.errors.confirmPassword}</p>
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mini ui teal button"
+          style={{ marginBottom: "30px" }}
+        >
+          {loading ? "Loading..." : "Submit"}
+        </button>
+
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
+
+      <Link className="Back" to="/">
+        Back to HomePage
+      </Link>
     </div>
   );
 };

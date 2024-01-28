@@ -1,88 +1,93 @@
-import React, { useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import React from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
+  const navigate = useNavigate();
+
+  const initialValues = {
     username: "",
     password: "",
-  });
-
-  const [error, setError] = useState(null);
-
-  const history = useHistory();
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validationSchema = Yup.object({
+    username: Yup.string().required("Please enter your username"),
+    password: Yup.string().required("Please enter your password"),
+  });
 
-    setError(null);
-
-    if (!formData.username || !formData.password) {
-      setError("Please enter both username and password");
-      return;
-    }
-
-    fetch("/api/auth/login", {
+  const handleSubmit = (values, { setSubmitting, setFieldError }) => {
+    fetch("http://localhost:5555/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(values),
     })
       .then((response) => response.json())
       .then((data) => {
+        setSubmitting(false);
+
         if (data.error) {
-          setError(data.error);
+          setFieldError("general", data.error);
           return;
         }
 
-        history.push("/dashboard");
+        navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Error:", error);
-
-        setError("An unexpected error occurred");
+        setFieldError("general", "An unexpected error occurred");
+        setSubmitting(false);
       });
   };
 
   return (
     <div>
       <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            Username:
-            <input
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <div>
+            <label htmlFor="username">Username:</label>
+            <Field
               type="text"
+              id="username"
               name="username"
-              value={formData.username}
-              onChange={handleChange}
+              placeholder="Enter your username"
             />
-          </label>
-        </div>
-        <div>
-          <label>
-            Password:
-            <input
+            <ErrorMessage name="username" component="div" className="error" />
+          </div>
+
+          <div>
+            <label htmlFor="password">Password:</label>
+            <Field
               type="password"
+              id="password"
               name="password"
-              value={formData.password}
-              onChange={handleChange}
+              placeholder="Enter your password"
             />
-          </label>
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-      </form>
-      <p>
-        Don't have an account? <Link to="/register">Register here</Link>.
-      </p>
+            <ErrorMessage name="password" component="div" className="error" />
+          </div>
+
+          <div>
+            <button type="submit">Login</button>
+          </div>
+
+          <p>
+            Don't have an account? <Link to="/register">Register here</Link>.
+          </p>
+
+          <ErrorMessage
+            name="general"
+            component="div"
+            style={{ color: "red" }}
+          />
+        </Form>
+      </Formik>
     </div>
   );
 };

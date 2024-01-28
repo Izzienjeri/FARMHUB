@@ -1,18 +1,34 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 const Logout = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.removeItem("accessToken");
+    navigate("http://localhost:5555/auth/login");
+  }, [navigate]);
 
-    history.push("/login");
-  }, [history]);
+  const initialValues = {};
+
+  const validationSchema = Yup.object({});
+
+  const handleSubmit = (values, { setSubmitting }) => {
+    setSubmitting(false);
+  };
 
   return (
     <div>
       <p>Logging out...</p>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form />
+      </Formik>
     </div>
   );
 };

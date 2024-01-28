@@ -6,11 +6,14 @@ const FarmList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/farm_management/farms", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
+        const response = await fetch(
+          "http://localhost:5555/farm_management/farms",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            },
+          }
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch farms");
         }

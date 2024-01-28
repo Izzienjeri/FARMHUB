@@ -7,6 +7,7 @@ from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_restful import Api, Resource, reqparse, abort
 from farmhub_server.models import User, db, TokenBlocklist
+from flask_cors import CORS
 import datetime
 
 auth_bp = Blueprint('auth', __name__)
@@ -48,7 +49,8 @@ class UserLogin(Resource):
         user = User.query.get(current_user_id)
         if not user:
             return abort(404, detail="User not found")
-        return {"username": user.username, "user_id": user.id}
+        response_body = {"username": user.username, "user_id": user.id}
+        return make_response(jsonify(response_body), 200)
 
     def post(self):
         data = login_args.parse_args()
@@ -61,8 +63,9 @@ class UserLogin(Resource):
             return abort(403, detail="Wrong password")
 
         token = create_access_token(identity=user.id)
-        return {"access_token": token, "username": user.username, "user_id":user.id,"firstname":user.firstname,"lastname":user.lastname,"email":user.email}
-
+        response_body = {"access_token": token, "username": user.username, "user_id":user.id,"firstname":user.firstname,"lastname":user.lastname,"email":user.email}
+        return make_response(jsonify(response_body), 200)
+    
 class UserRegister(Resource):
     def get(self):
         users = User.query.all()
@@ -75,9 +78,8 @@ class UserRegister(Resource):
         new_user = User(username=data.username, firstname=data.firstname, lastname=data.lastname, email=data.email, password=bcrypt.generate_password_hash(data.password).decode('utf-8'))
         db.session.add(new_user)
         db.session.commit()
-        return {'detail': f'User {data.username} has been created successfully'}
-
-
+        response_body = {'detail': f'User {data.username} has been created successfully'}
+        return make_response(jsonify(response_body), 200)
 
 
 
@@ -89,21 +91,36 @@ class UserLogout(Resource):
         blocked_token = TokenBlocklist(jti=token['jti'], created_at=datetime.datetime.utcnow())
         db.session.add(blocked_token)
         db.session.commit()
-        return {'detail': "Token logged out"}
+        response_body = {'detail': "Token logged out"}
+        return make_response(jsonify(response_body), 200)
 
 
 
  
 
-class CheckEmail(Resource):
-    def get(self):
-        email = request.args.get('email')
-        user = User.query.filter(User.email == email).first()
-        response_body = {"exists": user is not None}
-        return make_response(response_body, 401)
+# class CheckEmail(Resource):
+#     def options(self):
+#         response_headers = {
+#             "Access-Control-Allow-Origin": "http://localhost:5173",
+#             "Access-Control-Allow-Methods": "POST",
+#             "Access-Control-Allow-Headers": "Content-Type, Authorization",
+#             "Access-Control-Allow-Credentials": "true",
+#         }
+#         return make_response("", 200, response_headers)
+
+#     def post(self):
+#         print("Received request to check email")
+#         data = request.get_json()
+#         email = data.get('email')
+#         print("Email:", email)
+#         user = User.query.filter(User.email == email).first()
+#         response_body = {"exists": user is not None}
+#         return make_response(jsonify(response_body), 200)
+
+
 
 
 api.add_resource(UserLogin, "/login")
 api.add_resource(UserRegister, "/register")
 api.add_resource(UserLogout, "/logout")
-api.add_resource(CheckEmail, '/check-email')
+# api.add_resource(CheckEmail, '/check-email')
