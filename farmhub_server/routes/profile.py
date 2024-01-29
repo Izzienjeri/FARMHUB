@@ -21,7 +21,7 @@ class UserProfileResource(Resource):
             "firstname": user.firstname,
             "lastname": user.lastname,
             "email": user.email,
-            # Add more profile information as needed
+        
         }
 
         return jsonify(profile_data), 200

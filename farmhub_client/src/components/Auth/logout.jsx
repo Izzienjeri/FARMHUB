@@ -8,7 +8,7 @@ const Logout = () => {
 
   useEffect(() => {
     localStorage.removeItem("accessToken");
-    navigate("http://localhost:5555/auth/login");
+    navigate("/login");
   }, [navigate]);
 
   const initialValues = {};

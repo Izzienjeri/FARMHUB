@@ -1,38 +1,55 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import UserProfile from "./userprofile";
+import UserProfile from "./UserProfile";
 import FarmManagement from "./farmmanagement";
 import TaskAssignment from "./taskassignment";
 import TaskProgress from "./taskprogress";
 
 const Dashboard = () => {
+  const cardStyle = {
+    transition: "transform 0.3s ease-in-out",
+    cursor: "pointer",
+  };
+
+  const hoverStyle = {
+    transform: "translateY(-10px)",
+  };
+
+  const [style, setStyle] = React.useState(cardStyle);
+
   return (
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/user_profile">My Profile</Link>
-          </li>
-          <li>
-            <Link to="/farm_management">Farm Management</Link>
-          </li>
-          <li>
-            <Link to="/task_assignment">Task Assignment</Link>
-          </li>
-          <li>
-            <Link to="/task_progress">Task Progress</Link>
-          </li>
-          <li>
-            <Link to="/logout">Logout</Link>
-          </li>
-        </ul>
-      </nav>
+      <div
+        style={style}
+        onMouseOver={() => setStyle(hoverStyle)}
+        onMouseOut={() => setStyle(cardStyle)}
+      >
+        <Link to="/dashboard/user_profile">My Profile</Link>
+      </div>
+      <div
+        style={style}
+        onMouseOver={() => setStyle(hoverStyle)}
+        onMouseOut={() => setStyle(cardStyle)}
+      >
+        <Link to="/dashboard/farm_management">Farm Management</Link>
+      </div>
+      <div
+        style={style}
+        onMouseOver={() => setStyle(hoverStyle)}
+        onMouseOut={() => setStyle(cardStyle)}
+      >
+        <Link to="/dashboard/task_assignment">Task Assignment</Link>
+      </div>
+      <div
+        style={style}
+        onMouseOver={() => setStyle(hoverStyle)}
+        onMouseOut={() => setStyle(cardStyle)}
+      >
+        <Link to="/dashboard/task_progress">Task Progress</Link>
+      </div>
+
       <div>
         <Routes>
-          <Route path="/" element={<h2>Welcome to the Dashboard!</h2>} />
           <Route path="/user_profile" element={<UserProfile />} />
           <Route path="/farm_management" element={<FarmManagement />} />
           <Route path="/task_assignment" element={<TaskAssignment />} />

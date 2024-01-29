@@ -6,7 +6,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const response = await fetch("http://localhost:5555/profile", {
+        const response = await fetch("http://localhost:5555/profile/profile", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },

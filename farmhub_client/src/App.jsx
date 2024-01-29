@@ -24,10 +24,10 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Register />} />
 
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/farmmanagement" element={<FarmManagement />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
+          {/* <Route path="/farmmanagement" element={<FarmManagement />} />
           <Route path="/taskassignment" element={<TaskAssignment />} />
-          <Route path="/taskprogress" element={<TaskProgress />} />
+          <Route path="/taskprogress" element={<TaskProgress />} /> */}
         </Routes>
       </div>
     </Router>

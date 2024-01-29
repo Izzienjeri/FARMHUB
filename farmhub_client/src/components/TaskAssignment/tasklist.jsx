@@ -6,7 +6,9 @@ const TaskList = () => {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("/api/tasks");
+        const response = await fetch(
+          "http://localhost:5555/task_assignment/tasks"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch tasks");
         }

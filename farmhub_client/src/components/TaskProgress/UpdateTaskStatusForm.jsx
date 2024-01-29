@@ -1,28 +1,31 @@
+// /home/izzie/Moringa/phase-4/FARMHUB/farmhub_client/src/components/Dashboard/UpdateTaskStatusForm.jsx
 import React, { useState, useEffect } from "react";
 
-const AssignTaskForm = () => {
-  const [workers, setWorkers] = useState([]);
+const UpdateTaskStatusForm = () => {
+  const [tasks, setTasks] = useState([]);
   const [formData, setFormData] = useState({
-    worker_id: "",
-    task_name: "",
+    task_id: "",
+    task_status: "",
   });
 
   useEffect(() => {
-    const fetchWorkers = async () => {
+    const fetchTasks = async () => {
       try {
-        const response = await fetch("/api/workers");
+        const response = await fetch(
+          "http://localhost:5555/task_progress/tasks"
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch workers");
+          throw new Error("Failed to fetch tasks");
         }
 
         const data = await response.json();
-        setWorkers(data.workers);
+        setTasks(data.tasks);
       } catch (error) {
-        console.error("Error fetching workers:", error);
+        console.error("Error fetching tasks:", error);
       }
     };
 
-    fetchWorkers();
+    fetchTasks();
   }, []);
 
   const handleChange = (e) => {
@@ -37,7 +40,7 @@ const AssignTaskForm = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5555/task_assignment/assign_task",
+        "http://localhost:5555/task_progress/update_status",
         {
           method: "POST",
           headers: {
@@ -48,57 +51,57 @@ const AssignTaskForm = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to assign the task");
+        throw new Error("Failed to update task status");
       }
 
-      console.log("Task assigned successfully");
+      console.log("Task status updated successfully");
       setFormData({
-        worker_id: "",
-        task_name: "",
+        task_id: "",
+        task_status: "",
       });
     } catch (error) {
-      console.error("Error assigning the task:", error);
+      console.error("Error updating task status:", error);
     }
   };
 
   return (
     <div>
-      <h2>Assign Task</h2>
+      <h3>Update Task Status</h3>
       <form onSubmit={handleSubmit}>
         <label>
-          Select Worker:
+          Select Task:
           <select
-            name="worker_id"
-            value={formData.worker_id}
+            name="task_id"
+            value={formData.task_id}
             onChange={handleChange}
             required
           >
             <option value="" disabled>
-              Select Worker
+              Select Task
             </option>
-            {workers.map((worker) => (
-              <option key={worker.worker_id} value={worker.worker_id}>
-                {worker.name}
+            {tasks.map((task) => (
+              <option key={task.task_id} value={task.task_id}>
+                {task.task_name}
               </option>
             ))}
           </select>
         </label>
         <br />
         <label>
-          Task Name:
+          New Status:
           <input
             type="text"
-            name="task_name"
-            value={formData.task_name}
+            name="task_status"
+            value={formData.task_status}
             onChange={handleChange}
             required
           />
         </label>
         <br />
-        <button type="submit">Assign Task</button>
+        <button type="submit">Update Task Status</button>
       </form>
     </div>
   );
 };
 
-export default AssignTaskForm;
+export default UpdateTaskStatusForm;

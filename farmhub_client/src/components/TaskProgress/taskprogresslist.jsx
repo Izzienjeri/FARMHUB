@@ -1,46 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const TaskProgressList = () => {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [taskProgress, setTaskProgress] = useState([]);
 
   useEffect(() => {
-    // Fetch tasks from the server when the component mounts
-    const fetchTasks = async () => {
+    const fetchTaskProgress = async () => {
       try {
-        const response = await fetch("/api/tasks"); // Adjust the API endpoint accordingly
-
+        const response = await fetch(
+          "http://localhost:5555/task_progress/task_progress"
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
+          throw new Error("Failed to fetch task progress");
         }
 
         const data = await response.json();
-        setTasks(data.tasks);
+        setTaskProgress(data.taskProgress);
       } catch (error) {
-        console.error("Error fetching tasks:", error);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching task progress:", error);
       }
     };
 
-    fetchTasks();
+    fetchTaskProgress();
   }, []);
 
   return (
     <div>
-      <h2>Task Progress List</h2>
-      {loading ? (
-        <p>Loading tasks...</p>
-      ) : (
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.task_id}>
-              <p>Task Name: {task.task_name}</p>
-              <p>Task Status: {task.task_status}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <h3>Task Progress List</h3>
+      <ul>
+        {taskProgress.map((progress) => (
+          <li key={progress.task_progress_id}>
+            {progress.task_name} - Status: {progress.task_status}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
